@@ -1,6 +1,6 @@
 .icons {
+    text-align: center;
     position: relative;
-    margin-right: .4em;   
     top: .14em;
 }
 
@@ -70,4 +70,9 @@ a {
     border-radius: 5px;
     border-width: 1px solid #1A77D2;
     max-height: 2em;
+}
+
+.center {
+    margin: auto;
+    text-align: center;
 }

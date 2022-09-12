@@ -8,25 +8,25 @@
   --rti-tag: #1A77D2 !important;
   --rti-tag-remove: #e53e3e !important;
   --rti-black: #000 !important;
-  font-family: "Roboto","Helvetica","Arial",sans-serif !important;
-  font-size: 14px !important;
-  color: var(--rti-color) !important;
-  align-items: center !important;
-  background-color: var(--rti-bg) !important;
-  border: 1px solid var(--rti-border) !important;
-  border-radius: var(--rti-radius) !important;
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: var(--rti-s) !important;
-  line-height: 1.4 !important;
-  padding: var(--rti-s) !important;
-  transition: box-shadow ease 0.25s, border-color ease 0.25s !important;
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
+  font-size: 14px;
+  color: var(--rti-color);
+  align-items: center;
+  background-color: var(--rti-bg);
+  border: 1px solid var(--rti-border);
+  border-radius: var(--rti-radius);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rti-s);
+  line-height: 1.4;
+  padding: var(--rti-s);
+  transition: box-shadow ease 0.25s, border-color ease 0.25s;
     &:focus-within {
-      border-color: var(--rti-main) !important;
-      box-shadow: var(--rti-main) 0px 0px 0px 1px !important;
+      border-color: var(--rti-main);
+      box-shadow: var(--rti-main) 0px 0px 0px 1px;
     }
     &:hover {
-        border-color: var(--rti-black) !important;
+        border-color: var(--rti-black);
     }
 }
 
@@ -51,7 +51,7 @@
 
 .rti--tag {
   color: var(--rti-color);
-  padding: 2px 0 2px 0;
+  padding: 2px 0 2px 6px;
 }
 
 .rti--tag button {
@@ -86,24 +86,24 @@ textarea:focus
   box-shadow: 0 0 0 1px #1976d2;
 }
 
-.refferal-base 
+.referral-base
 {
   margin: auto;
   padding: 3em 0 2em 0;
 }
 
-.refferal-form 
+.referral-form
 {
-    display: flex;
-    position: relative;
-    margin-right: 10%;
-    margin-left: 10%;
+  display: flex;
+  position: relative;
+  margin-right: 10%;
+  margin-left: 10%;
 }
 
-.refferal-center 
+.referral-center
 {
-    margin: auto;
-    text-align: center;
+  margin: auto;
+  text-align: center;
 }
 
 .MuiOutlinedInput-notchedOutline  {
@@ -120,7 +120,7 @@ textarea:focus
     letter-spacing: inherit;
     color: currentColor;
     padding: 4px 0 5px;
-    border: 10;
+    border: 10px;
     box-sizing: content-box;
     background: none;
     height: 4em;

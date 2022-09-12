@@ -1,11 +1,18 @@
 import './referral.scss'
 import * as React from 'react';
-import {useEffect, useState} from 'react';
-import {useParams} from "react-router-dom";
-import PhoneInput from 'react-phone-input-2';
+import {
+    useEffect,
+    useState
+} from 'react';
+import { useParams } from "react-router-dom";
+import PhoneInput, { CountryData } from 'react-phone-input-2';
 import { TagsInput } from "react-tag-input-component";
 import * as EmailValidator from 'email-validator';
-import {Add, Restore, UndoOutlined} from '@mui/icons-material';
+import {
+    Add,
+    Restore,
+    UndoOutlined
+} from '@mui/icons-material';
 import {
     Button,
     FormControl,
@@ -19,21 +26,36 @@ import {
     Grid
 } from '@mui/material';
 
-export default function RefferralForm(this: any, props: any) {
+interface ReferralFormProps {
+    status: string;
+    fullName: string;
+    referred_by: string;
+    ta_recruiter: string;
+    phone: string;
+    email: string;
+    linkedin: string;
+    cv: string;
+    tech_stacks: string[];
+    comments: string;
+}
 
-    interface initialState {
-        fullName: string;
-        referred_by: string;
-        ta_recruiter: string;
-        phone: string;
-        email: string;
-        linkedin: string;
-        cv: string;
-        tech_stacks: string[];
-        comments: string;
-    }
+interface ReferralFormState {
+    status: string;
+    fullName: string;
+    referred_by: string;
+    ta_recruiter: string;
+    phone: string;
+    email: string;
+    linkedin: string;
+    cv: string;
+    tech_stacks: string[];
+    comments: string;
+}
 
-    const initialState:initialState  = {
+export default function ReferralForm(props: ReferralFormProps) {
+
+    const initialReferralFormState:ReferralFormState  = {
+        status: '',
         fullName: '',
         referred_by: '',
         ta_recruiter: '',
@@ -47,12 +69,12 @@ export default function RefferralForm(this: any, props: any) {
 
     useEffect(() => {
         handleProps()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleProps = () => {
         if (props) {
-            setState({
+            setReferral({
+                status: id ? props.status : '',
                 fullName: id ? props.fullName : '',
                 referred_by: props.referred_by,
                 ta_recruiter: id ? props.ta_recruiter : '',
@@ -68,20 +90,17 @@ export default function RefferralForm(this: any, props: any) {
 
     const recruiters: string[] = ['Ana', 'Jack', 'Mary', 'John', 'Krish', 'Navin'];
 
-    const [
-        { fullName, referred_by, ta_recruiter, phone, email, linkedin, cv, tech_stacks, comments },
-        setState
-    ] = useState(initialState);
+    const [referral, setReferral] = useState<ReferralFormState>(initialReferralFormState);
 
     const clearState = () => {
-        setState({ ...initialState });
-        setState(prevState => ({ ...prevState }));
+        setReferral(initialReferralFormState);
+        setReferral(prevState => ({ ...prevState }));
     };
 
-    const {id}: any = useParams();
+    const { id }: any = useParams();
 
-    const handleInputValidations = (event: any) => {
-        let { id, value } = event.target;
+    const handleInputValidations = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        let { id, value } = event.currentTarget;
 
         switch (id) {
             case 'fullName':
@@ -90,38 +109,34 @@ export default function RefferralForm(this: any, props: any) {
             default:
                 break;
         }
-        setState(prevState => ({ ...prevState, [id]: value }));
+        setReferral(prevState => ({ ...prevState, [id]: value }));
     }
 
-    function handleNumber(event: any) {
-        const { value, id } = event;
+    function handleNumber(data: {} | CountryData, event: React.FormEvent<HTMLInputElement>) {
+        const { id, value } = event.currentTarget;
 
-        setState(prevState => ({ ...prevState, [id]: value }));
+        setReferral(prevState => ({ ...prevState, [id]: value }));
     }
 
-    const handleLinkedinOnFocus = (event: any) => {
-        const { id, value } = event.target;
-        setState(prevState => ({ ...prevState, [id]: value.slice(28,-1) }));
+    const handleLinkedinOnFocus = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { id, value } = event.currentTarget;
+        setReferral(prevState => ({ ...prevState, [id]: value.slice(28, -1) }));
     }
 
-    const handleLinkedinOnBlur = (event: any) => {
-        const { id, value } = event.target;
+    const handleLinkedinOnBlur = (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { id, value } = event.currentTarget;
 
         if(value.length<1){
-            setState(prevState => ({ ...prevState, [id]: '' }));
+            setReferral(prevState => ({ ...prevState, [id]: '' }));
         }
         else {
-            setState(prevState => ({ ...prevState, [id]: `https://www.linkedin.com/in/${value}/` }));
+            setReferral(prevState => ({ ...prevState, [id]: `https://www.linkedin.com/in/${value}/` }));
         }
     }
 
-    const isValidURL = (string: string) => {
-        var res = string.match(/[(http(s)?)://(www.)?a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/ig);
+    const isValidURL = (url: string) => {
+        var res = url.match(/[(http(s)?)://(www.)?a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/ig);
         return (res !== null)
-    };
-
-    const isEmptyString = (str: string) => {
-        return (typeof str === 'string' && str.trim().length === 0);
     };
 
     const [tags, setTags] = useState(id ? props.tech_stacks : []);
@@ -129,7 +144,7 @@ export default function RefferralForm(this: any, props: any) {
     const [open, setOpen] = useState(false);
 
     const handleSelection = (event: any) => {
-        setState(prevState => ({ ...prevState, ta_recruiter: event.target.value }));
+        setReferral(prevState => ({ ...prevState, ta_recruiter: event.target.value }));
     };
 
     const handleClose = () => {
@@ -141,15 +156,15 @@ export default function RefferralForm(this: any, props: any) {
     };
 
     return (
-      <Stack spacing={2} direction="column">
-        <div className="refferal-base">
-            <form className='refferal-form'>
+      <Stack spacing={ 2 } direction="column">
+        <div className="referral-base">
+            <form className='referral-form'>
                 <FormGroup>
-                    { id && <input id="id" type="text" value={id} hidden/> }
-                    <Stack spacing={4} direction={'column'}>
-                        <Stack spacing={4} direction="row">
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} md={id ? 6 : 6}>
+                    { id && <input id="id" type="text" value={ id } hidden/> }
+                    <Stack spacing={ 4 } direction={ 'column' }>
+                        <Stack spacing={ 4 } direction="row">
+                            <Grid container spacing={ 2 }>
+                                <Grid item xs={ 12 } md={ id ? 6 : 6 }>
                                     <TextField
                                         required
                                         fullWidth
@@ -158,10 +173,10 @@ export default function RefferralForm(this: any, props: any) {
                                         label="Full Name"
                                         variant="outlined"
                                         onChange={ handleInputValidations }
-                                        value={ fullName }
+                                        value={ referral.fullName }
                                     />
                                 </Grid>
-                                <Grid item xs={12} md={id ? 4 : 6}>
+                                <Grid item xs={ 12 } md={ id ? 4 : 6 }>
                                     <TextField
                                         required
                                         fullWidth
@@ -170,10 +185,10 @@ export default function RefferralForm(this: any, props: any) {
                                         label="Refered by"
                                         variant="outlined"
                                         onChange={ handleInputValidations }
-                                        value={referred_by}
+                                        value={ referral.referred_by }
                                     />
                                 </Grid>
-                                <Grid item xs={12} md={2}>
+                                <Grid item xs={ 12 } md={ 2 }>
                                     { id && <div>
                                     <FormControl fullWidth>
                                         <InputLabel id="ta_recruiter_label">TA Recruiter</InputLabel>
@@ -183,11 +198,11 @@ export default function RefferralForm(this: any, props: any) {
                                             open={ open }
                                             onClose={ handleClose }
                                             onOpen={ handleOpen }
-                                            value={ ta_recruiter }
+                                            value={ referral.ta_recruiter }
                                             label="Ta"
                                             onChange={ handleSelection }
                                         >
-                                            <MenuItem value={'None'}><em>None</em></MenuItem>
+                                            <MenuItem value={ 'None' }><em>None</em></MenuItem>
                                             {recruiters.map(name => (
                                                 <MenuItem value={ name }>{ name }</MenuItem>
                                             ))}
@@ -197,9 +212,9 @@ export default function RefferralForm(this: any, props: any) {
                                 </Grid>
                             </Grid>
                         </Stack>
-                        <Stack spacing={4} direction="row">
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} md={6}>
+                        <Stack spacing={ 4 } direction="row">
+                            <Grid container spacing={ 2 }>
+                                <Grid item xs={ 12 } md={ 6 }>
                                     <PhoneInput
                                         inputProps={{
                                             name: 'phone',
@@ -207,7 +222,7 @@ export default function RefferralForm(this: any, props: any) {
                                             autoFocus: true
                                             }}
                                         country={ 'mx' }
-                                        value={ phone }
+                                        value={ referral.phone }
                                         onChange={ handleNumber }
                                     />
                                 </Grid>
@@ -220,9 +235,9 @@ export default function RefferralForm(this: any, props: any) {
                                         label="Email"
                                         variant="outlined"
                                         defaultValue="Email"
-                                        value={ email }
+                                        value={ referral.email }
                                         onChange={ handleInputValidations }
-                                        error={ (isEmptyString(email) ? false : !EmailValidator.validate(email)) }
+                                        error={ (referral.email.trim().length === 0 ? false : !EmailValidator.validate(referral.email)) }
                                     />
                                 </Grid>
                             </Grid>
@@ -239,7 +254,7 @@ export default function RefferralForm(this: any, props: any) {
                                         onChange={ handleInputValidations }
                                         onFocus={ handleLinkedinOnFocus }
                                         onBlur={ handleLinkedinOnBlur }
-                                        value={ linkedin }
+                                        value={ referral.linkedin }
                                     />
                                 </Grid>
                                 <Grid item xs={12} md={6}>
@@ -251,13 +266,13 @@ export default function RefferralForm(this: any, props: any) {
                                         label="CV URL"
                                         variant="outlined"
                                         onChange={ handleInputValidations }
-                                        value={ cv }
-                                        error={ (isEmptyString(cv) ? false : !isValidURL(cv)) }
+                                        value={ referral.cv }
+                                        error={ referral.cv.trim().length === 0 ? false : !isValidURL(referral.cv) }
                                     />
                                 </Grid>
                             </Grid>
                         </Stack>
-                        <Stack spacing={4} direction="row">
+                        <Stack spacing={4} direction="column">
                             <Grid container spacing={2}>
                                 <Grid item xs={12} md={12}>
                                     <TagsInput
@@ -271,18 +286,22 @@ export default function RefferralForm(this: any, props: any) {
                             </Grid>
                         </Stack>
                         <Stack spacing={4} direction="row">
-                            <TextareaAutosize
-                                id="comment"
-                                maxRows={10}
-                                aria-label="minimum height"
-                                placeholder="Comments"
-                                style={{ width: '100%', height: 180 }}
-                                value={ comments }
-                                onChange={ handleInputValidations }
-                            />
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} md={12}>
+                                    <TextareaAutosize
+                                        id="comment"
+                                        maxRows={10}
+                                        aria-label="minimum height"
+                                        placeholder="Comments"
+                                        style={{ width: '94%', height: 180 }}
+                                        value={ referral.comments }
+                                        onChange={ handleInputValidations }
+                                    />
+                                </Grid>
+                            </Grid>
                         </Stack>
                         <Stack spacing={4} direction="column">
-                            <div className='refferal-center'>
+                            <div className='referral-center'>
                                 <Stack spacing={2} direction="row">
                                     <Button type='reset' variant="contained" endIcon={<Restore />} onClick={clearState}>
                                         Clear
