@@ -1,4 +1,4 @@
-import './referral.scss'
+import './referralForm.scss'
 import * as React from 'react';
 import {
     useEffect,

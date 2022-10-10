@@ -1,14 +1,12 @@
 //Dependencies
 import React from "react";
-import ApexTable from "../../components/table/table";
-import Divider from '@mui/material/Divider';
-import Chip from '@mui/material/Chip';
+import { ReferralDataGrid } from "../../components/referral";
 import { Link } from "react-router-dom";
-import { Button } from "@mui/material";
+import { Button, Chip, Divider } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import './myreferrals.scss'
+import './referrals.scss'
 
-const Myreferrals = () => {
+const Referrals = () => {
     return (
         <>
             <div className="main">
@@ -22,9 +20,9 @@ const Myreferrals = () => {
                         </Button>
                     </Link>
                 </div>
-                <ApexTable/>
+                <ReferralDataGrid/>
             </div>
         </>
     );
 }
-export default Myreferrals;
+export default Referrals;

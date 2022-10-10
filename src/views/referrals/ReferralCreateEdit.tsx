@@ -4,8 +4,8 @@ import React, {
     useState,
     FunctionComponent
 } from "react";
-import ReferralForm from "../../components/referralform/ReferralForm";
-import './referral.scss'
+import { ReferralForm } from "../../components/referral";
+import './referralCreateEdit.scss'
 import { useParams } from "react-router-dom";
 import {
     Chip,
@@ -14,7 +14,7 @@ import {
     CircularProgress
 } from "@mui/material";
 
-const Referral: FunctionComponent = () => {
+const ReferralCreateEdit: FunctionComponent = () => {
     const { id }: any = useParams();
     const [referralData, setReferralData] = useState<any>();
     const [isLoaded, setIsLoaded] = useState(false);
@@ -63,4 +63,4 @@ const Referral: FunctionComponent = () => {
     );
 }
 
-export default Referral;
+export default ReferralCreateEdit;

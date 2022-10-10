@@ -4,18 +4,17 @@ import {
     Route,
     Redirect
 } from 'react-router-dom';
-import { MyBonus } from "./views/bonus";
-import { MyReferral } from "./views/myreferrals";
-import { NotFound } from "./views/notfound";
-import { Referral } from "./views/referral";
+import { MyBonus } from "./views/bonus"
+import { NotFound } from "./views/not-found";
+import { ReferralCreateEdit, Referrals } from "./views/referrals";
 
 const switchDashboardRoutes = (
     <Switch>
             <Route strict exact path="/" render={ () => <Redirect to={ "/referrals" }/> }/>
             <Route strict exact path="/bonus" component={MyBonus} />
-            <Route strict exact path="/referrals" component={MyReferral} />
-            <Route strict exact path="/referrals/create" component={Referral} />
-            <Route path="/referrals/edit/:id" component={Referral} />
+            <Route strict exact path="/referrals" component={Referrals} />
+            <Route strict exact path="/referrals/create" component={ReferralCreateEdit} />
+            <Route path="/referrals/edit/:id" component={ReferralCreateEdit} />
             <Route path="*" component={NotFound} />
     </Switch>
 );
