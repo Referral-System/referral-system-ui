@@ -7,7 +7,7 @@ const Dashboard = () => {
     return (
         <div className="App">
             <Navbar/>
-            {switchDashboardRoutes}
+            { switchDashboardRoutes }
         </div>
     );
 }
