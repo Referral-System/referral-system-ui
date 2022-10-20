@@ -62,28 +62,28 @@
   margin: 2px;
 }
 
-textarea {
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  font-size: 14px;
-  display: block;
-  letter-spacing: inherit;
-  color: currentColor;
-  border: 1px solid #CACACA;
-  border-radius: 5px;
-  padding: 12px;
-  box-sizing: content-box;
-  background: none;
-  transition: box-shadow ease 0.25s, border-color ease 0.25s;
-}
-
-textarea:hover {
-  border-color: #000;
-}
-
-textarea:focus {
-  border-color: #1976d2;
-  box-shadow: 0 0 0 1px #1976d2;
-}
+//textarea {
+//  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+//  font-size: 14px;
+//  display: block;
+//  letter-spacing: inherit;
+//  color: currentColor;
+//  border: 1px solid #CACACA;
+//  border-radius: 5px;
+//  padding: 12px;
+//  box-sizing: content-box;
+//  background: none;
+//  transition: box-shadow ease 0.25s, border-color ease 0.25s;
+//}
+//
+//textarea:hover {
+//  border-color: #000;
+//}
+//
+//textarea:focus {
+//  border-color: #1976d2;
+//  box-shadow: 0 0 0 1px #1976d2;
+//}
 
 .referral-base {
   margin: auto;
