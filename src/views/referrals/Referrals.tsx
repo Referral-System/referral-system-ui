@@ -2,7 +2,7 @@ import * as React from "react";
 import { ReferralDataGrid } from "../../components/referral";
 import Divider from '@mui/material/Divider';
 import Chip from '@mui/material/Chip';
-import { Button } from "@mui/material";
+import {Box, Button} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import './referrals.scss'
 
@@ -24,7 +24,9 @@ const Referrals = () => {
                         Create Referral
                     </Button>
                 </div>
-                <ReferralDataGrid/>
+                <Box height={'500px'}>
+                    <ReferralDataGrid/>
+                </Box>
             </div>
         </>
     );

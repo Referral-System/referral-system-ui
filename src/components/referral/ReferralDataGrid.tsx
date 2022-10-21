@@ -3,22 +3,17 @@ import {
     useEffect,
     useState
 } from 'react';
-import { DataGrid, GridToolbarColumnsButton, GridToolbarContainer, } from '@mui/x-data-grid';
-import { DeleteOutlined, EditOutlined, EmailOutlined, FileOpenOutlined, LinkedIn } from '@mui/icons-material/';
+import {DataGrid, GridToolbarColumnsButton, GridToolbarContainer,} from '@mui/x-data-grid';
+import {DeleteOutlined, EditOutlined, EmailOutlined, FileOpenOutlined, LinkedIn} from '@mui/icons-material/';
 import {
-    Box,
     Chip,
-    Grid,
     IconButton,
     LinearProgress,
-    Stack,
-    styled,
     Tooltip,
-    tooltipClasses,
-    TooltipProps
 } from "@mui/material";
-import { Referral } from "../../views/referrals/referral";
+import {Referral} from "../../views/referrals/referral";
 import './referralDataGrid.scss';
+import {useFetchAllReferrals} from "../../views/referrals/referralService";
 
 type chipColor = "primary" | "success" | "error" | "default" | "secondary" | "info" | "warning" | undefined;
 const statusList: string[] = ['in progress', 'hired', 'closed'];
@@ -37,16 +32,16 @@ const progress = (referralStatusId: string | undefined): chipColor => {
     }
 }
 
-const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
-    <Tooltip { ...props } classes={ { popper: className } }/>
-))(({ theme }) => ({
-    [`& .${ tooltipClasses.tooltip }`]: {
-        backgroundColor: theme.palette.common.white,
-        color: 'rgba(0, 0, 0, 0.87)',
-        boxShadow: theme.shadows[1],
-        fontSize: 11,
-    },
-}));
+// const LightTooltip = styled(({className, ...props}: TooltipProps) => (
+//     <Tooltip {...props} classes={{popper: className}}/>
+// ))(({theme}) => ({
+//     [`& .${tooltipClasses.tooltip}`]: {
+//         backgroundColor: theme.palette.common.white,
+//         color: 'rgba(0, 0, 0, 0.87)',
+//         boxShadow: theme.shadows[1],
+//         fontSize: 11,
+//     },
+// }));
 
 const referralDataGridColumns: any = [
     {
@@ -62,8 +57,8 @@ const referralDataGridColumns: any = [
         editable: true,
         valueOptions: statusList,
         renderCell: (params: any) => (
-            <Chip className={ 'center' } label={ params.value } size="small" variant="outlined"
-                  color={ progress(params.value) }/>
+            <Chip className={'center'} label={params.value} size="small" variant="outlined"
+                  color={progress(params.value)}/>
         ),
     },
     {
@@ -82,11 +77,12 @@ const referralDataGridColumns: any = [
         headerAlign: 'center',
         width: 74,
         renderCell: (params: any) => (
-            <LightTooltip title="Click to open">
-                <IconButton className='icons' color="primary" component="span">
-                    <LinkedIn onClick={ () => window.open(params.value, '_blank', 'noopener,noreferrer') }/>
+            <Tooltip title="Click to open">
+                <IconButton className='icons' color="primary" component="button"
+                            onClick={() => window.open(params.value, '_blank', 'noopener,noreferrer')}>
+                    <LinkedIn/>
                 </IconButton>
-            </LightTooltip>
+            </Tooltip>
         ),
     },
     {
@@ -98,11 +94,12 @@ const referralDataGridColumns: any = [
         headerAlign: 'center',
         width: 30,
         renderCell: (params: any) => (
-            <LightTooltip title="Click to open">
-                <IconButton className='icons' color="primary" component="span">
-                    <FileOpenOutlined onClick={ () => window.open(params.value, '_blank', 'noopener,noreferrer') }/>
+            <Tooltip title="Click to open">
+                <IconButton className='icons' color="primary" component="button"
+                            onClick={() => window.open(params.value, '_blank', 'noopener,noreferrer')}>
+                    <FileOpenOutlined/>
                 </IconButton>
-            </LightTooltip>
+            </Tooltip>
         ),
     },
     {
@@ -122,14 +119,14 @@ const referralDataGridColumns: any = [
         width: 254,
         renderCell: (params: any) => (
             <div className='email-icon'>
-                <LightTooltip title={ 'Click to copy' }>
-                    <IconButton className='icons' color="primary" component="span">
-                        <EmailOutlined onClick={ () => {
-                            navigator.clipboard.writeText(params.value)
-                        } }/>
+                <Tooltip title={'Click to copy'}>
+                    <IconButton className='icons' color="primary" component="button" onClick={() => {
+                        navigator.clipboard.writeText(params.value)
+                    }}>
+                        <EmailOutlined/>
                     </IconButton>
-                </LightTooltip>
-                { params.value }
+                </Tooltip>
+                {params.value}
             </div>
 
         ),
@@ -144,7 +141,7 @@ const referralDataGridColumns: any = [
         width: 310,
         renderCell: (params: any) => (
             <div className='tech_tag_container'>
-                { params.value.map((tech: string) => (<span className='tag'>{ tech }</span>)) }
+                {params.value.map((tech: string) => (<span key={Math.random()} className='tag'>{tech}</span>))}
             </div>
         ),
     },
@@ -170,16 +167,21 @@ const referralDataGridColumns: any = [
         hideable: false,
         width: 120,
         renderCell: (params: any) => (
-            <Box className={ 'center' }>
-                <Stack direction={ 'row' } spacing={ 2 }>
-                    <IconButton color="primary" component="span">
-                        <EditOutlined onClick={ () => window.location.href = "/referrals/edit/" + params.id }/>
-                    </IconButton>
-                    <IconButton color="error" component="span">
-                        <DeleteOutlined onClick={ () => window.location.href = "#" }/>
-                    </IconButton>
-                </Stack>
-            </Box>
+            <>
+                <IconButton
+                    color="primary"
+                    component="button"
+                    onClick={ () => window.location.href = "/referrals/edit/" + params.id }
+                >
+                    <EditOutlined/>
+                </IconButton><IconButton
+                color="error"
+                component="button"
+                onClick={ () => window.location.href = "#" }
+            >
+                <DeleteOutlined/>
+            </IconButton>
+            </>
         ),
     },
 ];
@@ -193,56 +195,61 @@ function CustomToolbar() {
 }
 
 export default function ReferralDataGrid() {
-    const [referralRecords, setReferralRecords] = useState<Referral[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+    const { fetchAllReferrals, isLoadingFetchAllReferrals } = useFetchAllReferrals();
+    const [referrals, setReferrals] = React.useState<any>([]);
 
     useEffect(() => {
-        const fetchData = async () => await fetch('https://jsonplaceholder.typicode.com/users');
-        fetchData()
-            .then(response => response.json())
-            .then(data => handleCorrectData(data))
-    }, []);
+        fetchAllReferrals().then(response => {
+            console.log('Response from heroku', response);
+            setReferrals(handleCorrectData(response));
+        }).catch(e => {
+            console.log(e);
+        });
+    }, [fetchAllReferrals]);
 
-    const handleCorrectData = (referrals: any): void => {
-        const records: Referral[] = referrals.map((data: any) => {
+    // useEffect(() => {
+    //     const fetchData = async () => await fetch('https://jsonplaceholder.typicode.com/users');
+    //     fetchData()
+    //         .then(response => response.json())
+    //         .then(data => handleCorrectData(data))
+    // }, []);
+
+    const handleCorrectData = (referrals: any): Referral[] => {
+        return referrals.map((data: any) => {
+            const techStacks: string[] = data.tech_stack.split(',');
+            techStacks.pop();
+
             return {
                 id: data.id,
-                referredBy: 'Mark Goodman',
-                fullName: `${ data.name } ${ data.username }`,
-                phoneNumber: '5555555555',
+                referredBy: data.referred_by,
+                fullName: data.full_name,
+                phoneNumber: data.phone_number,
                 email: data.email,
-                linkedinUrl: 'https://www.linkedin.com/',
-                cvUrl: '#',
-                techStacks: ['Typescript', 'Java', 'Python', 'React', 'Javascript', 'Scala', 'MySQL', 'Angular', 'QA'],
-                taRecruiter: 'John',
-                referralStatusId: 'in progress',
+                linkedinUrl: data.linkedin_url,
+                cvUrl: data.cv_url,
+                techStacks: techStacks,
+                taRecruiter: data.ta_recruiter,
+                referralStatusId: data.status,
             }
         });
-
-        setReferralRecords(records);
-        setLoading(false);
     }
 
     const [pageSize, setPageSize] = useState(5);
 
     return (
-        <Stack spacing={ 4 } direction="column">
-            <Grid height={ '50vh' }>
-                <DataGrid
-                    key="referralDataGrid"
-                    components={ {
-                        LoadingOverlay: LinearProgress,
-                        Toolbar: CustomToolbar,
-                    } }
-                    rows={ referralRecords }
-                    columns={ referralDataGridColumns }
-                    getRowHeight={ () => "auto" }
-                    pageSize={ pageSize }
-                    onPageSizeChange={ (newPageSize) => setPageSize(newPageSize) }
-                    rowsPerPageOptions={ [5, 10, 50, 100] }
-                    loading={ loading }
-                />
-            </Grid>
-        </Stack>
+        <DataGrid
+            key="referralDataGrid"
+            components={{
+                LoadingOverlay: LinearProgress,
+                Toolbar: CustomToolbar,
+            }}
+            rows={referrals}
+            columns={referralDataGridColumns}
+            getRowHeight={() => "auto"}
+            pageSize={pageSize}
+            onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+            rowsPerPageOptions={[5, 10, 50, 100]}
+            loading={isLoadingFetchAllReferrals}
+        />
     );
 }

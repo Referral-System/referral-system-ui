@@ -6,7 +6,6 @@ import {
 import {useParams} from "react-router-dom";
 import PhoneInput from 'react-phone-input-2';
 import {TagsInput} from "react-tag-input-component";
-import * as EmailValidator from 'email-validator';
 import {
     Add,
     Restore,
