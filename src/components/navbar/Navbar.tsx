@@ -20,6 +20,10 @@ const views = [
     {
         title: 'My referral',
         url: 'referrals',
+    },
+    {
+        title: 'Users',
+        url: 'users',
     }
 ];
 
