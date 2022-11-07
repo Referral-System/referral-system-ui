@@ -7,6 +7,7 @@ import {
 import { MyBonus } from "./views/bonus";
 import { NotFound } from "./views/not-found";
 import { ReferralCreateEdit, Referrals } from "./views/referrals";
+import { Users } from './views/users';
 
 const switchDashboardRoutes = (
     <Switch>
@@ -15,6 +16,7 @@ const switchDashboardRoutes = (
         <Route strict exact path="/referrals" component={ Referrals }/>
         <Route strict exact path="/referrals/create" component={ ReferralCreateEdit }/>
         <Route path="/referrals/edit/:id" component={ ReferralCreateEdit }/>
+        {<Route path="/users" component={ Users } />}
         <Route path="*" component={ NotFound }/>
     </Switch>
 );
