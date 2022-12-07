@@ -1,9 +1,11 @@
 import axios from "axios";
 import {useMutation} from "@tanstack/react-query";
 
+const API_URL = 'https://referral-system-api.onrender.com'
+
 const fetchAllUsers: any = async () => {
     try {
-        const { data } = await axios.get('https://pure-caverns-73223.herokuapp.com:443/api/v1/users');
+        const { data } = await axios.get(`${API_URL}/api/v1/users`);
 
         return data;
     } catch(e) {
@@ -19,7 +21,7 @@ export const useFetchAllUsers = () => {
 
 const fetchAllRoles: any = async () => {
     try {
-        const { data } = await axios.get('https://pure-caverns-73223.herokuapp.com:443/api/v1/roles');
+        const { data } = await axios.get(`${API_URL}/api/v1/roles`);
 
         return data;
     } catch(e) {
@@ -33,26 +35,18 @@ export const useFetchAllRoles = () => {
     return { isSuccessFetchAllRoles: isSuccess, isLoadingFetchAllRoles: isLoading, fetchAllRoles: mutateAsync };
 }
 
-const createReferral = async () => {
-    const data = await axios.post('https://pure-caverns-73223.herokuapp.com/api/v1/referrals')
-
-    return data;
-}
-
-export const useCreateReferrals = () => {
-    const { isSuccess, isLoading, mutateAsync} = useMutation(createReferral);
-
-    return { isSuccessCreateReferrals: isSuccess, isLoadingCreateReferrals: isLoading, createReferral: mutateAsync };
-}
-
 const updateUser = async ( params: any ) => {
-    const url = `https://pure-caverns-73223.herokuapp.com/api/v1/users/${params.userData.id}`
-    const role_id = getByValue(params.roles, params.userData.value);
-    const data = { role_id: role_id };
+    try {
+        const url = `${API_URL}/api/v1/users/${params.userData.id}` 
+        const role_id = getByValue(params.roles, params.userData.value);
+        const data = { role_id: role_id };
 
-    const response = await axios.patch(url, data)
+        const response = await axios.patch(url, data)
         
-    return response;
+        return response;
+    } catch(e) {
+        throw e;
+    }
 }
 
 export const useUpdateUser = () => {

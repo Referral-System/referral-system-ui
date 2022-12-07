@@ -4,12 +4,14 @@ import {
     useState
 } from 'react';
 import { DataGrid, GridToolbarColumnsButton, GridToolbarContainer } from '@mui/x-data-grid';
-import { EditOutlined, EmailOutlined } from '@mui/icons-material/';
+import { EditOutlined, EmailOutlined, DeleteOutlined } from '@mui/icons-material/';
 import {
     Chip,
     IconButton,
     LinearProgress,
     Tooltip,
+    CircularProgress,
+    Grid
 } from "@mui/material";
 import { User } from "../../views/users/user";
 import { useFetchAllUsers } from "../../views/users/userService";
@@ -95,6 +97,31 @@ const userDataGridColumns: any = [
             </div>
         ),
     },
+    {
+        field: "actions",
+        type: 'actions',
+        headerName: "Actions",
+        hideable: false,
+        minwidth: 80,
+        flex: .4,
+        renderCell: (params: any) => (
+            <>
+                <IconButton
+                    color="primary"
+                    component="button"
+                    onClick={ () => window.location.href = "#" }
+                >
+                    <EditOutlined/>
+                </IconButton><IconButton
+                color="error"
+                component="button"
+                onClick={ () => window.location.href = "#" }
+            >
+                <DeleteOutlined/>
+            </IconButton>
+            </>
+        ),
+    },
 ];
 
 function CustomToolbar() {
@@ -106,9 +133,10 @@ function CustomToolbar() {
 }
 
 export default function UsersDataGrid() {
-    const { fetchAllUsers, isLoadingFetchAllUsers } = useFetchAllUsers();
-    const { fetchAllRoles, isLoadingFetchAllRoles } = useFetchAllRoles();
+    const { fetchAllUsers, isLoadingFetchAllUsers, isSuccessFetchAllUsers } = useFetchAllUsers();
+    const { fetchAllRoles, isLoadingFetchAllRoles, isSuccessFetchAllRoles } = useFetchAllRoles();
     const { updateUser, isSuccessUpdateUser } = useUpdateUser();
+    const [pageSize, setPageSize] = useState<number>(10);
     const [users, setUsers] = React.useState<any>([]);
     const [roles, setRoles] = React.useState<any>([]);
 
@@ -156,30 +184,37 @@ export default function UsersDataGrid() {
             }
         });
     }
-
-    const [pageSize, setPageSize] = useState(5);
-
+    
     return (
-        <DataGrid
+        <div className='main'>
+            { (isLoadingFetchAllRoles && isLoadingFetchAllUsers) && 
+            <Grid container spacing={ 2 } minHeight={ 60 } padding={ 10 }>
+                <Grid item md={ 12 }>
+                    <CircularProgress color="primary"/>
+                </Grid>
+            </Grid> }
+            { (isSuccessFetchAllUsers && isSuccessFetchAllRoles) &&
+            <DataGrid
             key="referralDataGrid"
             components={{
-                LoadingOverlay: LinearProgress,
-                Toolbar: CustomToolbar,
-            }}
-            rows={users}
-            columns={userDataGridColumns}
-            getRowHeight={() => "auto"}
-            pageSize={pageSize}
-            onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-            rowsPerPageOptions={[5, 10, 50, 100]}
-            loading={isLoadingFetchAllRoles && isLoadingFetchAllUsers}
-            onCellEditCommit={(data) => {
-                updateUser({userData: data, roles: roles}).then(response => {
-                    console.log('Response from heroku updateUser', response);
-                }).catch(e => {
-                    console.log(e);
-                });
+                 LoadingOverlay: LinearProgress,
+                 Toolbar: CustomToolbar,
              }}
-        />
+             rows={users}
+             columns={userDataGridColumns}
+             getRowHeight={() => "auto"}
+             pageSize={pageSize}
+             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+             rowsPerPageOptions={[5, 10, 50, 100]}
+             loading={isLoadingFetchAllRoles && isLoadingFetchAllUsers}
+             onCellEditCommit={(data) => {
+                 updateUser({userData: data, roles: roles}).then(response => {
+                     console.log('Response from heroku updateUser', response);
+                 }).catch(e => {
+                     console.log(e);
+                 });
+              }}
+              />}
+        </div>
     );
 }
