@@ -4,18 +4,24 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import {Dashboard} from "./views/dashboard";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+    document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-      <Router>
-          <Switch>
-              <Route path="/" component={Dashboard} />
-          </Switch>
-      </Router>
-  </React.StrictMode>
+    // Remove comments on StricMode once this is in prod mode
+    // <React.StrictMode>
+        <QueryClientProvider client={queryClient}>
+            <Router>
+                <Switch>
+                    <Route path="/" component={Dashboard}/>
+                </Switch>
+            </Router>
+        </QueryClientProvider>
+    // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
